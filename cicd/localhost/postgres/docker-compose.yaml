@@ -4,7 +4,7 @@ version: '3.8'
 services:
   temporal-postgres:
     image: postgres:13.1
-    container_name: temporal-postgres
+    container_name: temporal-app-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres

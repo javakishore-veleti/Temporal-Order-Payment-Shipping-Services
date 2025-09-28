@@ -49,8 +49,7 @@ public class OrderWorkflowImpl implements OrderWorkflow {
     }
 
     @Override
-    public OrderWfRespMaster processOrder(OrderWfReq orderWfReq) {
-        OrderWfRespMaster orderWfRespMaster = new OrderWfRespMaster();
+    public void processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfRespMaster) {
 
         OrderWfResp createOrderResp = orderActivity.placeOrder(orderWfReq);
         orderWfRespMaster.setOrderWfResp(createOrderResp);
@@ -62,7 +61,5 @@ public class OrderWorkflowImpl implements OrderWorkflow {
         ShippingWfReq shippingWfReq = new ShippingWfReq();
         ShippingWfResp shippingWfResp = shippingActivity.processShipment(shippingWfReq);
         orderWfRespMaster.setShippingWfResp(shippingWfResp);
-
-        return orderWfRespMaster;
     }
 }
