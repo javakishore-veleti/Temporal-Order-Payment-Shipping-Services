@@ -3,11 +3,12 @@ package com.jk.poc.springboot.temporal.app_common.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class OrderLineReq {
+public class OrderLineReq implements Serializable {
     private String orderId;
     private String orderLineId;
     private Integer lineNo;

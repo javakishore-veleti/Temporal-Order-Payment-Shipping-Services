@@ -29,9 +29,9 @@ public class OrderActivityImpl implements OrderActivity {
     @Override
     public OrderWfResp placeOrder(OrderWfReq orderWfReq) {
         var order = new Order();
+        order.setOrderId(UUID.randomUUID().toString());
         order.setCustomerId(UUID.randomUUID().toString());
         order.setStatus("PLACED");
-
 
         var savedOrder = orderRepository.save(order);
         LOGGER.info("Order {} placed for customer {}", savedOrder.getOrderId(), savedOrder.getCustomerId());

@@ -9,10 +9,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
         hbm2ddl:
           create_namespaces=true
+        format_sql: true
     sql:
       init:
         mode: always

@@ -1,6 +1,7 @@
 package com.jk.poc.springboot.temporal.order.config;
 
 import com.jk.poc.springboot.temporal.app_common.workflow.activities.OrderActivity;
+import com.jk.poc.springboot.temporal.order.workflow.OrderActivityImpl;
 import com.jk.poc.springboot.temporal.order.workflow.OrderWorkflowImpl;
 import io.temporal.client.WorkflowClient;
 import io.temporal.serviceclient.WorkflowServiceStubs;
@@ -19,7 +20,7 @@ public class TemporalConfig {
     private String temporalTargetHostAndIp = "localhost:7233";
 
     @Autowired
-    private OrderActivity orderActivity;
+    private OrderActivityImpl orderActivity;
 
     @PostConstruct
     public void startWorkers() {
@@ -27,9 +28,9 @@ public class TemporalConfig {
         var client = WorkflowClient.newInstance(stub);
 
         var factory = WorkerFactory.newInstance(client);
-        Worker worker = factory.newWorker(TemporalWorkflowHelper.WORKFLOW_ORDER_TASK_QUEUE);
+        Worker worker = factory.newWorker(TemporalWorkflowHelper.ORDER_LIFECYCLE_WORKFLOW_TASK_QUEUE);
         worker.registerWorkflowImplementationTypes(OrderWorkflowImpl.class);
-        worker.registerActivitiesImplementations();
-
+        worker.registerActivitiesImplementations(orderActivity);
+        factory.start();
     }
 }

@@ -30,9 +30,14 @@ public class OrderWorkflowImpl implements OrderWorkflow {
     private RetryOptions retryOptions;
     private ActivityOptions defaultActivityOptions = null;
     private Map<String, ActivityOptions> methodOptions;
+    private boolean initialized = false;
 
     @PostConstruct
     public void init() {
+        if(initialized) {
+            return;
+        }
+
         LOGGER.info("OrderWorkflowImpl init STARTED");
 
         methodOptions = new HashMap<>();
@@ -45,21 +50,39 @@ public class OrderWorkflowImpl implements OrderWorkflow {
 
         orderActivity = Workflow.newActivityStub(OrderActivity.class, defaultActivityOptions, methodOptions);
 
+        paymentActivity = Workflow.newActivityStub(PaymentActivity.class, defaultActivityOptions, methodOptions);
+
+        initialized = true;
         LOGGER.info("OrderWorkflowImpl init COMPLETED");
     }
 
     @Override
     public void processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfRespMaster) {
+        if(!initialized) {
+            this.init();
+        }
+
+        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder STARTED");
 
         OrderWfResp createOrderResp = orderActivity.placeOrder(orderWfReq);
         orderWfRespMaster.setOrderWfResp(createOrderResp);
+
+        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder COMPLETED");
+
+        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment STARTED");
 
         PaymentWfReq paymentWfReq = new PaymentWfReq();
         PaymentWfResp paymentWfResp = paymentActivity.processPayment(paymentWfReq);
         orderWfRespMaster.setPaymentWfResp(paymentWfResp);
 
+        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment COMPLETED");
+
+        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment STARTED");
+
         ShippingWfReq shippingWfReq = new ShippingWfReq();
         ShippingWfResp shippingWfResp = shippingActivity.processShipment(shippingWfReq);
         orderWfRespMaster.setShippingWfResp(shippingWfResp);
+
+        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment STARTED");
     }
 }
