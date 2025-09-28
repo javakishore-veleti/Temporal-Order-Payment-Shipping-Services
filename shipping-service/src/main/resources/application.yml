@@ -1,0 +1,21 @@
+server:
+  port: 7173
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres?current_schema=shipment_db
+    username: temporal
+    password: temporal
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          create_namespaces=true
+        format_sql: true
+    sql:
+      init:
+        mode: always
+

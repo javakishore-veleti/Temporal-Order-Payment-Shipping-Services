@@ -1,11 +1,10 @@
-package com.jk.poc.springboot.temporal.order.workflow;
+package com.jk.poc.springboot.temporal.app_common.workflow;
 
+import com.jk.poc.springboot.temporal.app_common.config.TemporalWorkflowHelper;
 import com.jk.poc.springboot.temporal.app_common.dto.*;
-import com.jk.poc.springboot.temporal.app_common.workflow.OrderWorkflow;
 import com.jk.poc.springboot.temporal.app_common.workflow.activities.OrderActivity;
 import com.jk.poc.springboot.temporal.app_common.workflow.activities.PaymentActivity;
 import com.jk.poc.springboot.temporal.app_common.workflow.activities.ShippingActivity;
-import com.jk.poc.springboot.temporal.order.config.TemporalWorkflowHelper;
 import io.temporal.activity.ActivityOptions;
 import io.temporal.common.RetryOptions;
 import io.temporal.workflow.Workflow;
@@ -52,37 +51,43 @@ public class OrderWorkflowImpl implements OrderWorkflow {
 
         paymentActivity = Workflow.newActivityStub(PaymentActivity.class, defaultActivityOptions, methodOptions);
 
+        shippingActivity = Workflow.newActivityStub(ShippingActivity.class, defaultActivityOptions, methodOptions);
+
         initialized = true;
         LOGGER.info("OrderWorkflowImpl init COMPLETED");
     }
 
     @Override
-    public void processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfRespMaster) {
+    public OrderWfRespMaster processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfRespMaster) {
         if(!initialized) {
             this.init();
         }
 
-        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder STARTED");
+        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder STARTED Business Process ID {}", orderWfReq.getBusinessProcessId());
 
         OrderWfResp createOrderResp = orderActivity.placeOrder(orderWfReq);
         orderWfRespMaster.setOrderWfResp(createOrderResp);
+        orderWfRespMaster.setOrderId(createOrderResp.getOrderId());
 
-        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder COMPLETED");
+        LOGGER.info("OrderWorkflowImpl orderActivity.placeOrder COMPLETED Business Process ID {}", orderWfReq.getBusinessProcessId());
 
-        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment STARTED");
+        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment STARTED Business Process ID {}", orderWfReq.getBusinessProcessId());
 
         PaymentWfReq paymentWfReq = new PaymentWfReq();
+        paymentWfReq.setBusinessProcessId(orderWfRespMaster.getBusinessProcessId());
         PaymentWfResp paymentWfResp = paymentActivity.processPayment(paymentWfReq);
         orderWfRespMaster.setPaymentWfResp(paymentWfResp);
 
-        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment COMPLETED");
+        LOGGER.info("OrderWorkflowImpl paymentActivity.processPayment COMPLETED Business Process ID {}", orderWfReq.getBusinessProcessId());
 
-        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment STARTED");
+        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment STARTED Business Process ID {}", orderWfReq.getBusinessProcessId());
 
         ShippingWfReq shippingWfReq = new ShippingWfReq();
+        shippingWfReq.setBusinessProcessId(orderWfRespMaster.getBusinessProcessId());
         ShippingWfResp shippingWfResp = shippingActivity.processShipment(shippingWfReq);
         orderWfRespMaster.setShippingWfResp(shippingWfResp);
 
-        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment STARTED");
+        LOGGER.info("OrderWorkflowImpl shippingActivity.processShipment COMPLETED Business Process ID {}", orderWfReq.getBusinessProcessId());
+        return orderWfRespMaster;
     }
 }

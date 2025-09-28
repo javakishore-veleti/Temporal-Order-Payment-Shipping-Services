@@ -34,8 +34,12 @@ public class OrderActivityImpl implements OrderActivity {
         order.setStatus("PLACED");
 
         var savedOrder = orderRepository.save(order);
+
+        OrderWfResp orderWfResp = new OrderWfResp(savedOrder.getOrderId());
+        orderWfResp.setBusinessProcessId(orderWfReq.getBusinessProcessId());
+
         LOGGER.info("Order {} placed for customer {}", savedOrder.getOrderId(), savedOrder.getCustomerId());
-        return new OrderWfResp();
+        return orderWfResp;
     }
 
     @Override

@@ -12,4 +12,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @Setter
 @Getter
 public class PaymentWfResp implements Serializable {
+
+    private String paymentId;
+    private String businessProcessId;
 }

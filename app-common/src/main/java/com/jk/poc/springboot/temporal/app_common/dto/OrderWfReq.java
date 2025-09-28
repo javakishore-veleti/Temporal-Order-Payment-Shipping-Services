@@ -13,4 +13,6 @@ public class OrderWfReq implements Serializable {
     private String orderId;
     private String customerId;
     private List<OrderLineReq> orderLineReqs;
+    private String businessProcessId;
+    private String workflowId;
 }

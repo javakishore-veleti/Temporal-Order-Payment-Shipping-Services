@@ -12,4 +12,8 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @Getter
 @Setter
 public class ShippingWfReq implements Serializable {
+    private String shipmentId;
+    private String orderId;
+    private String paymentId;
+    private String businessProcessId;
 }

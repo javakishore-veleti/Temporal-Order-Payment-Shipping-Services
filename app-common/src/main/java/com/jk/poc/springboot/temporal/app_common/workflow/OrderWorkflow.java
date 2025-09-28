@@ -9,5 +9,5 @@ import io.temporal.workflow.WorkflowMethod;
 public interface OrderWorkflow {
 
     @WorkflowMethod
-    void processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfResp);
+    OrderWfRespMaster processOrder(OrderWfReq orderWfReq, OrderWfRespMaster orderWfResp);
 }

@@ -8,8 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="app-common" />
-        <module name="payment-service" />
-        <module name="shipping-service" />
       </profile>
       <profile name="Annotation profile for Temporal-Order-Payment-Shipping-Services" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -19,6 +17,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
         <module name="order-service" />
+        <module name="payment-service" />
+        <module name="shipping-service" />
         <module name="temporal-app-main" />
       </profile>
     </annotationProcessing>

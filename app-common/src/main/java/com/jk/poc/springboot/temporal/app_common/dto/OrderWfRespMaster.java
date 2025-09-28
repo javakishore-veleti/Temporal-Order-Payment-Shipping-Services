@@ -12,4 +12,6 @@ public class OrderWfRespMaster implements Serializable {
     private OrderWfResp orderWfResp;
     private PaymentWfResp paymentWfResp;
     private ShippingWfResp shippingWfResp;
+    private String businessProcessId;
+    private String workflowId;
 }

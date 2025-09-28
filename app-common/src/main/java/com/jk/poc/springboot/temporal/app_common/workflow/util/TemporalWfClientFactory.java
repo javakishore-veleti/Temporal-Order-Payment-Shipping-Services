@@ -5,11 +5,11 @@ import io.temporal.client.WorkflowOptions;
 public class TemporalWfClientFactory {
 
     // TemporalWfHelper.ORDER_LIFECYCLE_WORKFLOW_TASK_QUEUE
-    public static <T> T createWfClient(Class<T> workflowInterfaceClass, String taskQueue) {
+    public static <T> T createWfClient(Class<T> workflowInterfaceClass, String taskQueue,String customWfId) {
 
         var workflowClient = TemporalWfHelper.getWorkflowClient();
         WorkflowOptions options = WorkflowOptions.newBuilder()
-                .setTaskQueue(taskQueue).build();
+                .setTaskQueue(taskQueue).setWorkflowId(customWfId).build();
 
         // OrderWorkflow workflow = workflowClient.newWorkflowStub(OrderWorkflow.class, options);
         T workflow = workflowClient.newWorkflowStub(workflowInterfaceClass, options);

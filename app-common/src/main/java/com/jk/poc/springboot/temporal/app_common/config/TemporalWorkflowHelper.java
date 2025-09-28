@@ -1,4 +1,4 @@
-package com.jk.poc.springboot.temporal.order.config;
+package com.jk.poc.springboot.temporal.app_common.config;
 
 public class TemporalWorkflowHelper {
 

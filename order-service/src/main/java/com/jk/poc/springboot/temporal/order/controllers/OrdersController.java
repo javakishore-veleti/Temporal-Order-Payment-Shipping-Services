@@ -6,6 +6,8 @@ import com.jk.poc.springboot.temporal.order.facades.OrdersWfFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/temporal/v1/orders")
 public class OrdersController {
@@ -16,6 +18,8 @@ public class OrdersController {
     @RequestMapping(method = RequestMethod.POST)
     public OrderWfRespMaster createOrder(@RequestBody OrderWfReq orderWfReq) {
         OrderWfRespMaster orderWfRespMaster = new OrderWfRespMaster();
+        orderWfRespMaster.setBusinessProcessId(UUID.randomUUID().toString());
+        orderWfReq.setBusinessProcessId(orderWfRespMaster.getBusinessProcessId());
 
         ordersWfFacade.createOrder(orderWfRespMaster, orderWfReq);
 
