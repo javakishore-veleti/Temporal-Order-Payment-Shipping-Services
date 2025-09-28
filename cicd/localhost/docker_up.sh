@@ -8,6 +8,7 @@ echo "DONE Starting Postgres DB Server for the Application"
 sleep 2
 
 echo "Starting temporal-server"
-docker compose -f "${THIS_SCRIPT_DIR}"/temporal-server/docker-compose.yml up -d
+# docker compose -f "${THIS_SCRIPT_DIR}"/temporal-server/docker-compose.yml up -d
+docker compose -f "${THIS_SCRIPT_DIR}"/temporalio-server-github/docker-compose/docker-compose.yml up -d
 echo "DONE Starting temporal-server"
 docker ps -a

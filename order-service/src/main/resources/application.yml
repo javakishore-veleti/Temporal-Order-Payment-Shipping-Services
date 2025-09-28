@@ -4,11 +4,16 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?current_schema=order_db
-    username: postgres
-    password: postgres
+    username: temporal
+    password: temporal
   jpa:
     hibernate:
-      ddl-auto: update
-  sql:
-    init:
-      mode: always
+      ddl-auto: create
+    properties:
+      hibernate:
+        hbm2ddl:
+          create_namespaces=true
+    sql:
+      init:
+        mode: always
+
